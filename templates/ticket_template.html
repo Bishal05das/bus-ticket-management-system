@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ticket</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+        }
+        .ticket {
+            width: 400px;
+            background-color: white;
+            border: 3px solid #0066cc;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        .ticket-header {
+            background-color: #0066cc;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        .ticket-header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        .ticket-logo {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .ticket-details {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .detail-section {
+            background-color: #cfdee2;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .detail-label {
+            color: #6c757d;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .detail-value {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .ticket-footer {
+            background-color: #f1f3f5;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .barcode {
+            width: 200px;
+            height: 60px;
+            background: repeating-linear-gradient(
+                to right,
+                black 0, black 2px, 
+                white 2px, white 4px
+            );
+        }
+        .qr-code {
+            width: 60px;
+            height: 60px;
+            background-color: black;
+        }
+        .ticket-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 100px;
+            color: rgba(0,102,204,0.1);
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    {% comment %} <div class="ticket">
+        <h1>Bus Ticket</h1>
+        <p><strong>Name:</strong> {{ booking.name }}</p>
+        <p><strong>Email:</strong> {{ booking.email }}</p>
+        <p><strong>Seat Number:</strong> {{ booking.seat.seat_number }}</p>
+        <p><strong>Schedule:</strong> {{ booking.seat.schedule }}</p>
+        <p><strong>Bus:</strong> {{ booking.seat.schedule.bus.name }}</p>
+        <p><strong>Source:</strong> {{ booking.seat.schedule.route.from_city }}</p>
+        <p><strong>Destination:</strong> {{ booking.seat.schedule.route.to_city }}</p>
+        <p><strong>Departure Date:</strong> {{ booking.seat.schedule.departure_date }}</p>
+        <p><strong>Departure Time:</strong> {{ booking.seat.schedule.departure_time }}</p>
+        <p><strong>Booking Time:</strong> {{ booking.created_at }}</p>
+    </div> {% endcomment %}
+    <div class="ticket">
+        <div class="ticket-logo">ML</div>
+        <div class="ticket-watermark"></div>
+        <div class="ticket-header">
+            <h1>Bus Ticket</h1>
+        </div>
+        <div class="ticket-details">
+            <div class="detail-section">
+                <div class="detail-label">Passenger</div>
+                <div class="detail-value">{{ booking.name }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">EMAIL</div>
+                <div class="detail-value">{{ booking.email }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">From</div>
+                <div class="detail-value">{{ booking.seat.schedule.route.from_city }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">To</div>
+                <div class="detail-value">{{ booking.seat.schedule.route.to_city }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Date</div>
+                <div class="detail-value">{{ booking.seat.schedule.departure_date }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Departure</div>
+                <div class="detail-value">{{ booking.seat.schedule.departure_time }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">Seat</div>
+                <div class="detail-value">{{ booking.seat.seat_number }}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">BUS</div>
+                <div class="detail-value">{{ booking.seat.schedule.bus.name }}</div>
+            </div>
+        </div>
+        <div class="ticket-footer">
+            <div class="barcode"></div>
+            <div class="qr-code"></div>
+        </div>
+    </div>
+</body>
+</html>

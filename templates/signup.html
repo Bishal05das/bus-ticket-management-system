@@ -1,0 +1,196 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+</head>
+<body>
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign Up</button>
+    </form>
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .signup-container {
+            width: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+            transition: all 0.5s ease;
+        }
+
+        .signup-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at center, 
+                rgba(102, 126, 234, 0.2) 0%, 
+                rgba(118, 75, 162, 0.1) 100%
+            );
+            animation: glow 10s ease infinite alternate;
+            opacity: 0.6;
+            border-radius: 50%;
+        }
+
+        @keyframes glow {
+            0% {
+                transform: scale(0.8) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 0.6;
+            }
+        }
+
+        .signup-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .signup-header h2 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+            transform: translateZ(20px);
+        }
+
+        .signup-header p {
+            color: #666;
+            font-size: 14px;
+            transform: translateZ(10px);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+            transition: all 0.3s ease;
+            transform: translateZ(5px);
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            transform: translateZ(15px);
+        }
+
+        .signup-btn:hover {
+            transform: translateZ(15px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-text {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-content">
+            <div class="signup-header">
+                <h2>Create an Account</h2>
+                <p>Join our platform and start your journey</p>
+            </div>
+            <form method="POST" action="{% url 'signup' %}">
+                	{% csrf_token %}
+                <div class="input-group">
+                    <input type="email" name="username" placeholder="username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Create Password" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit" class="signup-btn">Sign Up</button>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="/login">Log In</a>
+            </div>
+            <div class="terms-text">
+                By signing up, you agree to our Terms of Service and Privacy Policy
+            </div>
+        </div>
+    </div>
+</body>
+</html>

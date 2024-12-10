@@ -1,0 +1,202 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Seats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .seats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .seat {
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+        }
+        .booked {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .available {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Seats for {{ schedule.bus.name }} on {{ schedule.route.from_city }} to {{ schedule.route.to_city }}</h1>
+    <div class="seats">
+        {% for seat in seats %}
+            <div class="seat {% if seat.is_booked %}booked{% else %}available{% endif %}">
+                {{ seat.seat_number }}
+            </div>
+        {% endfor %}
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirm Reservation</button>
+        {% if form.errors %}
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}
+                        <li>{{ field.label }}: {{ field.errors|join:", " }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </form>
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Bus Seat Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .seat {
+            transition: background-color 0.2s ease;
+        }
+        .seat:not(.booked):hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <div id="app" class="max-w-4xl mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center"> Bus Seat Booking</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Seat Layout -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Select Your Seats</h2>
+
+                <div class="w-full h-12 flex justify-end mb-8">
+                    <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center text-white text-sm">
+                        Driver
+                    </div>
+                </div>
+            
+                <div id="seat-container" class="grid grid-cols-4 gap-x-1 gap-y-4">
+                    {% for seat in seats %}
+                        <button 
+                            class="seat [&:nth-child(4n+3)]:ml-7  [&:nth-child(4n+1)]:ml-7  w-12 h-12 rounded-lg transition-colors duration-200 flex items-center justify-center font-medium 
+                            {% if seat.is_booked %}bg-red-500 cursor-not-allowed{% else %}bg-gray-200 hover:bg-gray-300 cursor-pointer{% endif %}" 
+                            data-seat-number="{{ seat.seat_number }}" 
+                            {% if seat.is_booked %}disabled{% endif %}
+                        >
+                            {{ seat.seat_number }}
+                        </button>
+                    {% endfor %}
+                </div>  
+               
+
+                <div class="flex justify-center gap-4 mt-6">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-gray-200 rounded"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-red-500 rounded"></div>
+                        <span>Booked</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Booking Details</h2>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Selected Seat Number</label>
+                        <input id="selected-seat" name="seat_number" type="number" class="py-2 px-3 bg-gray-100 rounded w-full" readonly>
+                    </div>
+                    
+                
+
+                    {{ form.as_p }}
+
+                    <button 
+                        id="book-button" 
+                        class="w-full mt-6 bg-green-600 text-white py-2 rounded disabled:bg-gray-400"
+                        type="submit" 
+                        disabled
+                    >
+                        Confirm Booking
+                    </button>
+                </form>
+                
+
+                {% if form.errors %}
+                    <ul class="mt-4 text-red-500">
+                        {% for field in form %}
+                            {% if field.errors %}
+                                <li>{{ field.label }}: {{ field.errors|join:", " }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const seatButtons = document.querySelectorAll('.seat:not(.bg-red-500)');
+        const selectedSeatInput = document.getElementById('selected-seat');
+        const bookButton = document.getElementById('book-button');
+
+        let selectedSeat = null;
+
+        seatButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const seatNumber = button.getAttribute('data-seat-number');
+
+                if (selectedSeat === seatNumber) {
+                    selectedSeat = null;
+                    button.classList.remove('bg-green-500');
+                    button.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                } else {
+                    if (selectedSeat) {
+                        const previousButton = document.querySelector(`button[data-seat-number="${selectedSeat}"]`);
+                        if (previousButton) {
+                            previousButton.classList.remove('bg-green-500');
+                            previousButton.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                        }
+                    }
+                    selectedSeat = seatNumber;
+                    button.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                    button.classList.add('bg-green-500');
+                }
+
+                updateSelectedSeat();
+            });
+        });
+
+        function updateSelectedSeat() {
+            selectedSeatInput.value = selectedSeat || '';
+            bookButton.disabled = !selectedSeat;
+        }
+    </script>
+</body>
+</html>
+

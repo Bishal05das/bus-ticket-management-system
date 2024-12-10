@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shohoz</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <img src="shohoz-logo.png" alt="Shohoz Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="search_buses">Bus</a></li>
+                    <li><a href="#">Launch</a></li>
+                    <li><a href="#">Air</a></li>
+                    <li><a href="#">Train</a></li>
+                    <li><a href="#">Event</a></li>
+                    <li><a href="#">Park</a></li>
+                </ul>
+            </nav>
+            <div class="contact-info">
+                <p>Contact Us</p>
+                <p>16374</p>
+            </div>
+            <div class="language-selector">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h1>Bangladesh's Largest Online Ticket Destination</h1>
+            <div class="stats">
+                <div class="stat">
+                    <h2>250 Million+</h2>
+                    <p>Tickets Sold</p>
+                </div>
+                <div class="stat">
+                    <h2>3000+</h2>
+                    <p>Routes</p>
+                </div>
+                <div class="stat">
+                    <h2>10 Million+</h2>
+                    <p>Happy Users</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="introduction">
+            <h2>Introducing you to the Shohoz way of life</h2>
+            <p>A one-stop solution for your travel needs</p>
+        </section>
+    </main>
+</body>
+</html>

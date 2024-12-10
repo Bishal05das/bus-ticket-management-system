@@ -1,0 +1,132 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Buses</title>
+</head>
+<body>
+    <h1>Search for Available Buses</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h2>Available Buses</h2>
+        <ul>
+            {% for schedule in results %}
+                <li>
+                    Bus: {{ schedule.bus.name }}, Route: {{ schedule.route.from_city }} to {{ schedule.route.to_city }}, Departure: {{ schedule.departure_date }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if request.GET %}
+            <p>No buses available for the selected route and date.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Buses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #ffffff;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        ul li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .bus-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bus-info div {
+            margin: 5px 0;
+        }
+        .no-results {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search for Available Buses</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h2>Available Buses</h2>
+        <ul>
+            {% for schedule in results %}
+                <li>
+                    <div class="bus-info">
+                        <div><strong>Bus:</strong> {{ schedule.bus.name }}</div>
+                        <div><strong>Route:</strong> {{ schedule.route.from_city }} to {{ schedule.route.to_city }}</div>
+                        <div><strong>Departure Date:</strong> {{ schedule.departure_date }}</div>
+                        <div><strong>Departure Time:</strong> {{ schedule.departure_time }}</div>
+                        <div><strong>Available Seats:</strong> {{ schedule.available_seats }}</div>
+                        <div><a href="{% url 'view_seats' schedule.id %}" class="view-seats-button">View Seats</a></div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if request.GET %}
+            <p class="no-results">No buses available for the selected route and date.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
+
