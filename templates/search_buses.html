@@ -30,7 +30,7 @@
 </html> {% endcomment %}
 
 
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -128,5 +128,373 @@
         {% endif %}
     {% endif %}
 </body>
-</html>
+</html> {% endcomment %}
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Bus - Search & Book</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --background-color: #f5f6fa;
+            --card-background: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .search-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            padding: 3rem 0;
+            color: white;
+        }
+
+        .search-container {
+            background-color: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background-color: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .search-btn:hover {
+            background-color: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .results-section {
+            padding: 2rem 0;
+        }
+
+        .bus-card {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .bus-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .bus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .bus-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .bus-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-item i {
+            color: var(--accent-color);
+        }
+
+        .seats-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            width: 70%;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .view-seats-btn, .book-now-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .view-seats-btn {
+            background-color: #eee;
+            color: var(--primary-color);
+        }
+
+        .book-now-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .view-seats-btn:hover {
+            background-color: #ddd;
+        }
+
+        .book-now-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .bus-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bus"></i>Express Bus
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-ticket-alt"></i> My Bookings</a>
+                <a href="#"><i class="fas fa-user"></i> Account</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <form class="search-form" method="get">
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> From</label>
+                        <select name="from_city" required>
+                            <option value="">Select departure city</option>
+                            <option value="rajshahi">Rajshahi</option>
+                            <option value="boston">Boston</option>
+                            <option value="washington">Washington DC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker"></i> To</label>
+                        <select name="to_city" required>
+                            <option value="">Select destination city</option>
+                            <option value="dhaka">Dhaka</option>
+                            <option value="new_york">New York</option>
+                            <option value="washington">Washington DC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-calendar-alt"></i> Date</label>
+                        <input type="date" name="journey_date" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i> Search Buses
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="container">
+            {% if results %}
+                {% for schedule in results %}
+                    <div class="bus-card">
+                        <div class="bus-header">
+                            <div class="bus-name">
+                                <i class="fas fa-bus"></i> {{ schedule.bus.name }}
+                            </div>
+                            <div class="price">$49.99</div>
+                        </div>
+                        <div class="bus-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-signs"></i>
+                                <span>{{ schedule.route.from_city }} → {{ schedule.route.to_city }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="far fa-clock"></i>
+                                <span>{{ schedule.departure_time }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-hourglass-half"></i>
+                                <span>4h 30m</span>
+                            </div>
+                        </div>
+                        <div class="seats-status">
+                            <i class="fas fa-chair"></i>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <span>{{ schedule.available_seats }} seats left</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="view-seats-btn" onclick="window.location.href='{% url 'view_seats' schedule.id %}'">
+                                <i class="fas fa-th"></i> View Seats
+                            </button>
+                            <button class="book-now-btn">
+                                <i class="fas fa-ticket-alt"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% if request.GET %}
+                    <div class="no-results">
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
+                        <p>No buses available for the selected route and date.</p>
+                        <p>Try different dates or routes for better results.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+</body>
+</html>

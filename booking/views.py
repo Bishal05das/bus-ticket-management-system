@@ -30,19 +30,21 @@ def search_buses(request):
 
     if request.method == "GET" and 'from_city' in request.GET:
         form = BusSearchForm(request.GET)
+        print("GET PARAMETERS:",request.GET)
         if form.is_valid():
             from_city = form.cleaned_data['from_city']
             to_city = form.cleaned_data['to_city']
             journey_date = form.cleaned_data['journey_date']
-
+            #print(f"from_city:${from_city} to_city:${to_city} journey_date: ${journey_date}")
+            print('checking')
             results = Schedule.objects.filter(
                 route__from_city=from_city,
                 route__to_city=to_city,
-                departure_date=journey_date
-                
-                
+                departure_date=journey_date   
             )
-
+            print(results)
+        else:
+            print("Form Errors:", form.errors)
     return render(request, 'search_buses.html', {'form': form, 'results': results})
 
 def view_seats(request, schedule_id):

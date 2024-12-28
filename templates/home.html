@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <header>
+    <header style="background-color:rgb(168, 205, 240);">
         <div class="top-bar">
             <div class="logo">
-                <img src="shohoz-logo.png" alt="Shohoz Logo">
+                <img src="https://i.ibb.co.com/k8ZVGwg/bus.png" alt="bus Logo">
             </div>
             <nav>
                 <ul>
@@ -37,7 +37,10 @@
         </div>
     </header>
 
-    <main>
+    {% comment %} <main style="color: white;height:100vh; background-image: url('https://i.ibb.co.com/drcLMf1/amy-chen-l-Ip5q8s0e7s-unsplash.jpg');background-position: center; background-repeat: no-repeat; background-size: 100%; position: relative;filter: blur(7px);" class="container">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+        <!-- Your content goes here -->
+
         <section class="hero-section">
             <h1>Bangladesh's Largest Online Ticket Destination</h1>
             <div class="stats">
@@ -60,6 +63,35 @@
             <h2>Introducing you to the Shohoz way of life</h2>
             <p>A one-stop solution for your travel needs</p>
         </section>
+    </main> {% endcomment %}
+    <main style="color: white; height: 100vh; position: relative;" class="container">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.ibb.co.com/drcLMf1/amy-chen-l-Ip5q8s0e7s-unsplash.jpg'); background-position: center; background-repeat: no-repeat; background-size: 100%; filter: blur(13px); z-index: 0;"></div>
+    
+        <!-- Your content goes here -->
+        <section class="hero-section" style="position: relative; z-index: 1;">
+            <h1 >Bangladesh's Largest Online Ticket Destination</h1>
+            <div class="stats">
+                <div class="stat">
+                    <h2>250 Million+</h2>
+                    <p>Tickets Sold</p>
+                </div>
+                <div class="stat">
+                    <h2>3000+</h2>
+                    <p>Routes</p>
+                </div>
+                <div class="stat">
+                    <h2>10 Million+</h2>
+                    <p>Happy Users</p>
+                </div>
+            </div>
+        </section>
+    
+        <section class="introduction" style="position: relative; z-index: 1;">
+            <h2>Introducing you to the Shohoz way of life</h2>
+            <p >A one-stop solution for your travel needs</p>
+        </section>
     </main>
+    
+
 </body>
 </html>
